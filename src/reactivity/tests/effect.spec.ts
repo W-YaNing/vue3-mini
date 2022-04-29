@@ -1,3 +1,6 @@
+import { reactive } from '../reactive'
+import { effect } from '../effect'
+
 describe('effect', () => {
   it('happy path', () => {
     const user = reactive({
@@ -6,7 +9,6 @@ describe('effect', () => {
     let nextAge;
     effect(() => {
       nextAge = user.age + 1
-      console.log(nextAge)
     })
     expect(nextAge).toBe(11)
 
