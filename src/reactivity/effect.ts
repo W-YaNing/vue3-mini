@@ -1,9 +1,12 @@
 
+import { extend } from '../shared/index'
+
 let activeEffect;
 class ReactiveEffect {
   private _fn: any
   deps = []
   active = true
+  onStop?: () => void
   // public scheduler: Function | undefined
   constructor(fn, public scheduler?) {
     this._fn = fn
@@ -15,6 +18,9 @@ class ReactiveEffect {
   stop() {
     if(this.active) {
       cleanupEffect(this)
+      if(this.onStop) {
+        this.onStop()
+      }
       this.active = false
     }
   }
@@ -51,7 +57,7 @@ export function track(target, key) {
 }
 
 export function isTracking() {
-  return  activeEffect !== undefined;
+  return activeEffect !== undefined;
 }
 
 export function trigger(target, key) {
@@ -72,8 +78,10 @@ export function effect(fn, options:any = {}) {
   // fn 
   const _effect = new ReactiveEffect(fn, options.scheduler)
 
-  _effect.run()
+  // extend
+  extend(_effect, options)
 
+  _effect.run()
   const runner:any =  _effect.run.bind(_effect)
 
   runner.effect = _effect
