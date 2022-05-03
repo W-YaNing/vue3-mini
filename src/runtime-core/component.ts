@@ -16,7 +16,6 @@ export function setupComponent(instance) {
 
 function setupSatefulComponent(instance) {
   const Component = instance.type
-
   const { setup } = Component
 
   if(setup) {
