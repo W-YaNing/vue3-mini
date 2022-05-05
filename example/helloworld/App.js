@@ -12,7 +12,13 @@ export const App = {
     })
     return h("div", {
       id: "root",
-      class: ['red', 'hard']
+      class: ['red', 'hard'],
+      onClick() {
+        console.log('click')
+      },
+      onMousedown() {
+        console.log('onMousedown')
+      }
     }, 'hi ' + that.msg)
   },
   setup() {
