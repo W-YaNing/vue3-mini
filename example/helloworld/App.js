@@ -1,16 +1,19 @@
 
 import { h } from '../../lib/guide-mini-vue.esm.js'
 
+
+window.that = null
 export const App = {
   // not have template
   render() {
+    that = this
+    setTimeout(() => {
+      console.log(that.$el)
+    })
     return h("div", {
       id: "root",
       class: ['red', 'hard']
-    }, [
-      h('p', { class: 'red' }, 'hi'),
-      h('p', { class: 'bule' }, 'mini-vue')
-    ])
+    }, 'hi ' + that.msg)
   },
   setup() {
     return {

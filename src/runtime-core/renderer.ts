@@ -26,18 +26,18 @@ function processComponent(vnode, container) {
   mountComponent(vnode, container)
 }
 
-function mountComponent(vnode, container) {
-  const instance = createComponentInstance(vnode)
+function mountComponent(initinalVnode, container) {
+  const instance = createComponentInstance(initinalVnode)
 
   setupComponent(instance)
   
-  setupRenderEffect(instance, container)
+  setupRenderEffect(instance, initinalVnode, container)
 }
 
 // 处理element
 function mountElement(vnode, container) {
   // tag
-  const el = document.createElement(vnode.type)
+  const el = (vnode.el = document.createElement(vnode.type) )
 
   const { children, props } = vnode
 
@@ -65,9 +65,17 @@ function mountChildren(vnode, container) {
   });
 }
 
-function setupRenderEffect(instance, container) {
-  const subTree = instance.render()
+function setupRenderEffect(instance, initinalVnode, container) {
+
+  // render 需要访问this
+  const { proxy } = instance
+
+  const subTree = instance.render.call(proxy)
   // vnode -> patch
   // vnode -> element -> mountElement
   patch(subTree, container)
+
+  // 这个时候所有的subTree都已经实例l好饿
+
+  initinalVnode.el = subTree.el
 }
