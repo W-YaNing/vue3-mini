@@ -45,7 +45,6 @@ function mountElement(vnode, container) {
   const el = (vnode.el = document.createElement(vnode.type) )
 
   const { children, props, shapeFlag } = vnode
-
   // child
   if(shapeFlag & ShapeFlags.TEXT_CHILDREN) {
     el.textContent = children

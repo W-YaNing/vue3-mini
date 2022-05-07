@@ -3,24 +3,17 @@ import { h } from '../../lib/guide-mini-vue.esm.js'
 
 import { Foo } from './Foo.js'
 
-window.that = null
 export const App = {
   // not have template
   render() {
-    that = this
-    setTimeout(() => {
-      console.log(that.$el)
+    const app = h('span', {}, 'hi ')
+    const foo = h(Foo, {}, {
+      header: ({age}) => h('p', {}, 'header' + age),
+      footer: () =>  h('p', {}, 'footer')
     })
     return h("div", {}, [
-      h('span', {}, 'hi ' + that.msg),
-      h(Foo, {
-        count: 1,
-        onAdd(a, b) {
-        },
-        onAddFoo(c,v) {
-          console.log('onAddFoo' + c, v)
-        }
-      })
+      app,
+      foo
     ])
   },
   setup() {
