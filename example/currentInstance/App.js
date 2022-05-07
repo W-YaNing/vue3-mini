@@ -1,5 +1,5 @@
 
-import { h, createTextVNode } from '../../lib/guide-mini-vue.esm.js'
+import { h, getCurrentInstance } from '../../lib/guide-mini-vue.esm.js'
 
 import { Foo } from './Foo.js'
 

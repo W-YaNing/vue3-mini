@@ -1,7 +1,7 @@
 
 
 
-import { h } from '../../lib/guide-mini-vue.esm.js'
+import { h, getCurrentInstance } from '../../lib/guide-mini-vue.esm.js'
 export const Foo = {
   setup(props) {
     const instance = getCurrentInstance()
@@ -10,6 +10,6 @@ export const Foo = {
   },
   
   render() {
-
+    return h('p', {}, "foo demo")
   }
 }
