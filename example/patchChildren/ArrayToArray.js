@@ -51,13 +51,13 @@ import { ref, h } from "../../lib/guide-mini-vue.esm.js";
 // (a b)
 // c (a b)
 // i = 0, e1 = -1, e2 = 0
-const prevChildren = [h("p", { key: "A" }, "A"), h("p", { key: "B" }, "B")];
-const nextChildren = [
-  h("p", { key: "D" }, "D"),
-  h("p", { key: "C" }, "C"),
-  h("p", { key: "A" }, "A"),
-  h("p", { key: "B" }, "B"),
-];
+// const prevChildren = [h("p", { key: "A" }, "A"), h("p", { key: "B" }, "B")];
+// const nextChildren = [
+//   h("p", { key: "D" }, "D"),
+//   h("p", { key: "C" }, "C"),
+//   h("p", { key: "A" }, "A"),
+//   h("p", { key: "B" }, "B"),
+// ];
 
 // 4. 老的比新的长
 //     删除老的
@@ -88,7 +88,7 @@ const nextChildren = [
 // 删除老的  (在老的里面存在，新的里面不存在)
 // 5.1
 // a,b,(c,d),f,g
-// a,b,(e,c),f,g
+// a,b,(e,c),f,g 
 // D 节点在新的里面是没有的 - 需要删除掉
 // C 节点 props 也发生了变化
 
@@ -210,19 +210,19 @@ const nextChildren = [
 // ];
 
 // fix c 节点应该是 move 而不是删除之后重新创建的
-// const prevChildren = [
-//   h("p", { key: "A" }, "A"),
-//   h("p", {}, "C"),
-//   h("p", { key: "B" }, "B"),
-//   h("p", { key: "D" }, "D"),
-// ];
+const prevChildren = [
+  h("p", { key: "A" }, "A"),
+  h("p", {}, "C"),
+  h("p", { key: "B" }, "B"),
+  h("p", { key: "D" }, "D"),
+];
 
-// const nextChildren = [
-//   h("p", { key: "A" }, "A"),
-//   h("p", { key: "B" }, "B"),
-//   h("p", {}, "C"),
-//   h("p", { key: "D" }, "D"),
-// ];
+const nextChildren = [
+  h("p", { key: "A" }, "A"),
+  h("p", { key: "B" }, "B"),
+  h("p", {}, "C"),
+  h("p", { key: "D" }, "D"),
+];
 
 export default {
   name: "ArrayToArray",
