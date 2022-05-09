@@ -5,6 +5,7 @@ import { createAppAPI } from './createApp'
 import { effect } from '../reactivity/effect'
 import { EMPTY_OBJ } from '../shared/index'
 import { shouldUpdateComponent } from './componentUpdateUtils'
+import { queueJobs } from './scheduler'
 
 export function createRenderer(options) {
   const { 
@@ -335,6 +336,7 @@ export function createRenderer(options) {
 
   function setupRenderEffect(instance, initinalVnode, container, anchor) {
     instance.update = effect(() => {
+      console.log('更新了')
       if(!instance.isMounted) {
         // render 需要访问this
         const { proxy } = instance
@@ -365,6 +367,10 @@ export function createRenderer(options) {
         patch(prevSubTree, subTree, container, instance, anchor)
 
       } 
+    },{
+      scheduler(){
+        queueJobs(instance.update)
+      }
     })
   } 
 
