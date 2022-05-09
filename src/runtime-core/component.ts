@@ -17,6 +17,7 @@ export function createComponentInstance(vnode, parent) {
     parent,
     isMounted: false,
     subTree: {},
+    next: {},
     slots: {} 
   }
 

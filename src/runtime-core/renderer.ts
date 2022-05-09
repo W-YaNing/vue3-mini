@@ -4,6 +4,7 @@ import { Fragment, Text } from './vnode'
 import { createAppAPI } from './createApp'
 import { effect } from '../reactivity/effect'
 import { EMPTY_OBJ } from '../shared/index'
+import { shouldUpdateComponent } from './componentUpdateUtils'
 
 export function createRenderer(options) {
   const { 
@@ -275,11 +276,26 @@ export function createRenderer(options) {
   }
 
   function processComponent(n1, n2, container, parentComponent, anchor) {
-    mountComponent(n2, container, parentComponent, anchor)
+    if(!n1) {
+      mountComponent(n2, container, parentComponent, anchor)
+    } else {
+      updateComponent(n1, n2)
+    }
+  }
+
+  function updateComponent(n1, n2) {
+    const instance = (n2.component = n1.component)
+    if(shouldUpdateComponent(n1, n2)) {
+      instance.next = n2
+      instance.update()
+    } else { 
+      n2.el = n1.el
+      n2.vnode = n2
+    }
   }
 
   function mountComponent(initinalVnode, container, parentComponent, anchor) {
-    const instance = createComponentInstance(initinalVnode, parentComponent)
+    const instance = (initinalVnode.component = createComponentInstance(initinalVnode, parentComponent))
 
     setupComponent(instance)
     
@@ -318,7 +334,7 @@ export function createRenderer(options) {
   }
 
   function setupRenderEffect(instance, initinalVnode, container, anchor) {
-    effect(() => {
+    instance.update = effect(() => {
       if(!instance.isMounted) {
         // render 需要访问this
         const { proxy } = instance
@@ -336,8 +352,11 @@ export function createRenderer(options) {
       } else {
         
         // render 需要访问this
-        const { proxy } = instance
-
+        const { proxy, next, vnode } = instance
+        if(next) {
+          next.el = vnode.el
+          updateComponentPreRender(instance, next)
+        }
         const subTree = instance.render.call(proxy)
         const prevSubTree = instance.subTree
 
@@ -345,7 +364,7 @@ export function createRenderer(options) {
 
         patch(prevSubTree, subTree, container, instance, anchor)
 
-      }
+      } 
     })
   } 
 
@@ -354,6 +373,11 @@ export function createRenderer(options) {
   }
 }
 
+function updateComponentPreRender(instance, nextVNode) {
+  instance.vnode = nextVNode
+  instance.next = null
+  instance.props = nextVNode.props
+}
 
 function getSequence(arr: number[]): number[] {
   const p = arr.slice();
